@@ -1,0 +1,29 @@
+{
+  "name": "node-reverse-indent",
+  "version": "1.0.0",
+  "description": "Reverse indent source code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp build",
+    "watch:build": "gulp watch:build",
+    "nodemon": "nodemon --watch build build/index.js"
+  },
+  "author": "monkey codes",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.22.0",
+    "babelify": "^7.3.0",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-cached": "^1.1.1",
+    "gulp-load-plugins": "^1.4.0",
+    "nodemon": "^1.11.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "colour": "^0.7.1",
+    "lodash": "^4.17.4",
+    "rxjs": "^5.0.3"
+  }
+}
