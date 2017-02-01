@@ -18,3 +18,14 @@ gulp.task('watch:build', gulp.series(
   'build',
   () => gulp.watch('./src/**/*.js', gulp.series('build'))
 ));
+
+gulp.task('lint', () => {
+    return gulp.src(['./src/**/*.js'])
+        .pipe($.eslint())
+        .pipe($.eslint.format());
+});
+
+gulp.task('watch:lint', gulp.series(
+  'lint',
+  () => gulp.watch('./src/**/*.js', gulp.series('lint'))
+));

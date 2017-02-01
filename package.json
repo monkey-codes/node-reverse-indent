@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "gulp lint",
     "build": "gulp build",
     "watch:build": "gulp watch:build",
+    "watch:lint": "gulp watch:lint",
     "nodemon": "nodemon --watch build build/index.js"
   },
   "author": "monkey codes",
@@ -14,9 +16,15 @@
   "devDependencies": {
     "babel-preset-es2015": "^6.22.0",
     "babelify": "^7.3.0",
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb": "^14.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
+    "eslint-plugin-react": "^6.9.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-babel": "^6.1.2",
     "gulp-cached": "^1.1.1",
+    "gulp-eslint": "^3.0.1",
     "gulp-load-plugins": "^1.4.0",
     "nodemon": "^1.11.0",
     "vinyl-source-stream": "^1.1.0"
