@@ -1,37 +1,46 @@
-import Rx from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 import fs from 'fs';
+import recursiveReaddir from 'recursive-readdir';
 import { createSubscriber } from './lib/util';
 import _ from 'lodash';
+import colour from 'colour';
 
+//const DIR = '/Users/jzietsman/tmp3';
+const DIR = '/Users/jzietsman/vagrant/devvm-0.5/git/stayz/stayz-core/src/main/java';
 
-const DIR = '/Users/jzietsman/tmp';
-
-const files$ = Rx.Observable.bindNodeCallback(fs.readdir)(DIR);
+const files$ = Observable.bindNodeCallback(recursiveReaddir)(DIR)
+  .mergeMap(files => Observable.from(files))
 
 files$
-  .map(file => `${DIR}/${file}`)
   .mergeMap(file => {
-    const lines$ = Rx.Observable.bindNodeCallback(fs.readFile)(file)
-      .map(content => content.toString().split('\n'));
-    return lines$;
-  })
-  .mergeMap(lines => {
-    const max$ = Rx.Observable.from(lines)
-      .map(line => line.length)
-      .max();
-    return Rx.Observable.of(lines)
-      .withLatestFrom(max$, (lines, max) => { return {lines,max} } );
-  })
-  .mergeMap(file => {
-    return Rx.Observable.from(file.lines)
-      .map(line => {
-        const leftPadPattern = /^\s+/;
-        const match = leftPadPattern.exec(line);
-        if(match){
-         line = line.trim() + match[0];
-        }
-        line = _.padStart(line,file.max);
-        return line;
+    return Observable.bindNodeCallback(fs.readFile)(file)
+      .map(content => content.toString().split('\n'))
+      .mergeMap(lines => {
+        const max$ = Observable.from(lines)
+          .map(line => line.length)
+          .max();
+        return Observable.of(lines)
+          .withLatestFrom(max$, (lines, max) => ( { file, lines, max } ) )
+          .mergeMap(({file, lines, max}) => {
+            return Observable.from(lines)
+              .map(swapLeadingSpace)
+              .map(line => _.padStart(line, max))
+              .toArray()
+              .map(indentedLines => ( { file, lines, max, indentedLines } ));
+          })
       });
   })
-  .subscribe(createSubscriber('test'));
+  .do(({file, lines, indentedLines}) => {
+    console.log(`\n${file}\n${lines.join('\n').red}\n${indentedLines.join('\n').green}\n`);
+  })
+  .subscribe(({file, indentedLines})=> {
+    fs.writeFile(file, indentedLines.join('\n'), (err) => {
+      if (err) throw err;
+      console.log(`${file} saved`.green);
+    });
+  });
+
+function swapLeadingSpace(line) {
+  const match = /^\s+/.exec(line);
+  return match ? line.trim() + match[0] : line.trim();
+}
