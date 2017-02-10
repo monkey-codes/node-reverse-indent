@@ -43,6 +43,5 @@ export default function rindent(dir, args) {
         if (err) throw err;
         console.log(`${'saved'.green} ${file}`.green);
       });
-
     });
 }
