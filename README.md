@@ -1,6 +1,6 @@
 ## Reverse Indent Source Files
 
-A simple node script to recursively reverse indent (source) files in a directory.  Ideal for pull requests on **April Fools' Day**.
+A simple node script to [recursively reverse indent (source) files](https://blog.monkey.codes/how-to-reverse-indent-files-with-rxjs/) in a directory.  Ideal for pull requests on **April Fools' Day**.
 
 ##Setup
 The script has been tested on node **6.9.2**.
